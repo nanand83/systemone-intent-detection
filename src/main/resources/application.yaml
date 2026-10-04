@@ -1,0 +1,6 @@
+spring:
+  ai:
+    typesafe:
+      api-key: ${OPENROUTER_API_KEY}
+      base-url: https://openrouter.ai/api/
+      model: typesafe/jev-1.13

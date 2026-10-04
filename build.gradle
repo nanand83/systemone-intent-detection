@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.1.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.enterprise.risk'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://spring.io' }
+}
+
+dependencies {
+    implementation platform('org.springaicommunity:typesafe-bom:0.2.0')
+    
+    implementation 'org.springaicommunity:typesafe-java-sdk'
+    implementation 'org.springaicommunity:spring-ai-starter-typesafe'
+    implementation 'org.springaicommunity:typesafe-spring-ai'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add('--enable-preview')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('bootRun') {
+    if (project.hasProperty('utterance')) {
+        args = [project.property('utterance')] 
+    }
+
+    def envFile = file("${projectDir}/.env")
+    if (envFile.exists()) {
+        envFile.eachLine { line ->
+            if (line.trim() && !line.startsWith('#')) {
+                def parts = line.split('=', 2)
+                if (parts.length == 2) {
+                    def key = parts[0].trim()
+                    def value = parts[1].trim()
+                    // Strip wrapping quotes if present
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.substring(1, value.length() - 1)
+                    }
+                    environment key, value
+                }
+            }
+        }
+    }
+}
