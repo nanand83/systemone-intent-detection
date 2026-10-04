@@ -36,10 +36,17 @@ Follow these steps to get the project running locally. **Note:** This service re
     git clone <repository-url>
     cd intent_detection
     ```
-2.  **Build and Run:**
+
+2. **Add OPENROUTER_API_KEY env variable**
+    Create .env file in root and add OpenRouter APIKey:
+    ```
+    OPENROUTER_API_KEY=sk-or-XXXXXXX
+    ```
+
+3.  **Build and Run:**
     Execute the standard Spring Boot run task via Gradle:
     ```bash
-    ./gradlew bootRun
+    ./gradlew bootRun -Putterance="I'm concerned about potential breaches related to GDPR for our European client accounts last quarter."
     ```
 
 ### Testing & Validation
